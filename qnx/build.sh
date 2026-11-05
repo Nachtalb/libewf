@@ -2,7 +2,7 @@
 # Build static ewftools (ewfacquire, ewfacquirestream, ewfexport, ewfinfo,
 # ewfverify) for QNX 6.5.0 armle-v7 from a libewf release tarball.
 #
-# Needs: docker, curl, tar, and the toolchain image built from
+# Needs: docker, curl, tar, patch, and the toolchain image built from
 # https://github.com/Nachtalb/qnx65-armv7-toolchain (branch fix/debian-mirrors):
 #   docker build --platform=linux/amd64 --target base-env \
 #       --build-arg BASE=base-8.5 -t qnx65-armv7-toolchain:8.5 .
@@ -23,6 +23,7 @@ mkdir -p "$OUT"
     "https://github.com/libyal/libewf/releases/download/$VERSION/libewf-experimental-$VERSION.tar.gz"
 rm -rf "$SRC"
 tar xzf "$OUT/libewf-$VERSION.tar.gz" -C "$OUT"
+patch -d "$SRC" -p1 < "$HERE/libsmdev-qnx-bytes-per-sector.patch"
 
 docker run --rm --platform=linux/amd64 -v "$SRC":/src -w /src -e CPU="$CPU" -e TOOLS="$TOOLS" "$IMG" sh -ec '
 P=arm-unknown-nto-qnx6.5.0eabi

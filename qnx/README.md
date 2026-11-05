@@ -20,3 +20,4 @@ On the device:
   Qnet is many times slower.
 - On small or busy systems use a low priority (`on -p 1`) and
   `-c empty-block`, so the acquisition does not starve the rest of the system.
+- QNX has no sector size query, so 512 bytes is assumed; override with `-P`.

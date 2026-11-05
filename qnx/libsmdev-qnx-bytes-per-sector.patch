@@ -1,0 +1,13 @@
+--- a/libsmdev/libsmdev_handle.c
++++ b/libsmdev/libsmdev_handle.c
+@@ -4334,6 +4334,10 @@
+ 	{
+ #if defined( BLKSSZGET ) || defined( DKIOCGETBLOCKSIZE ) || defined( DIOCGSECTORSIZE ) || defined( WINAPI )
+ 		return( 0 );
++#elif defined( __QNXNTO__ )
++		/* QNX has no portable sector size query; 512 is what io-blk exposes, -P overrides it */
++		internal_handle->bytes_per_sector     = 512;
++		internal_handle->bytes_per_sector_set = 1;
+ #else
+ 		libcerror_error_set(
+ 		 error,
